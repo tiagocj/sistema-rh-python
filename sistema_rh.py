@@ -79,82 +79,46 @@ def buscar_funcionario():
 def estatistica():
     print("\nESTATÍSTICA")
 
-    total_salarios = 0
+    cursor.execute("SELECT COUNT(*) FROM funcionarios")
+    resultado = cursor.fetchone()
+    quantidade = resultado[0]
 
-    for funcionario in funcionarios:
-        total_salarios = total_salarios + funcionario["salario"]
+    cursor.execute("SELECT SUM(salario) FROM funcionarios")
+    resultado_salarios = cursor.fetchone()
+    total_salarios = resultado_salarios[0]
 
-    quantidade = len(funcionarios)
+    cursor.execute("SELECT AVG(salario) FROM funcionarios")
+    resultado_media = cursor.fetchone()
+    media_salarios = resultado_media[0]
 
-    if quantidade > 0:
-        media = total_salarios / quantidade
+    cursor.execute("SELECT MAX(salario) FROM funcionarios")
+    resultado_maior = cursor.fetchone()
+    maior_salario = resultado_maior[0]
 
-        maior_salario = funcionarios[0]["salario"]
-        menor_salario = funcionarios[0]["salario"]
+    cursor.execute("SELECT MIN(salario) FROM funcionarios")
+    resultado_menor = cursor.fetchone()
+    menor_salario = resultado_menor[0]
 
-        for funcionario in funcionarios:
-            if funcionario["salario"] > maior_salario:
-                maior_salario = funcionario["salario"]
-
-            if funcionario["salario"] < menor_salario:
-                menor_salario = funcionario["salario"]
-
-        print(f"Funcionários cadastrados: {quantidade}")
-        print(f"Total dos salários: R$ {total_salarios:.2f}")
-        print(f"Média salarial: R$ {media:.2f}")
-        print(f"Maior salário: R$ {maior_salario:.2f}")
-        print(f"Menor salário: R$ {menor_salario:.2f}")
-
-    else:
-        print("Nenhum funcionário cadastrado.")
-
-
-def excluir_funcionario():
-    print("\nEXCLUIR FUNCIONÁRIO")
-
-    busca = input("Digite o nome do funcionário: ")
-
-    encontrado = False
-
-    for funcionario in funcionarios:
-        if busca.lower() in funcionario["nome"].lower():
-            funcionarios.remove(funcionario)
-
-            encontrado = True
-
-            print("Funcionário excluído com sucesso.")
-            break
-
-    if encontrado == False:
-        print("Funcionário não encontrado.")
-
+    print(f"Funcionários cadastrados: {quantidade}")
+    print(f"Total dos salários: R${total_salarios:.2f}")
+    print(F"Média salarial: R$ {media_salarios: .2f}")
+    print(f"Maior salário: R$ {maior_salario: .2f}")
+    print(f"Menor salário: R$ {menor_salario: .2f}")
 
 def editar_funcionario():
     print("\nEDITAR FUNCIONÁRIO")
 
-    busca = input("Digite o nome do funcionário: ")
+    busca = input("Digite o nome do funcionário.")
 
-    encontrado = False
+    cursor.execute("""
+    SELECT * FROM funcionarios
+    WHERE nome LIKE ?
+    """, (f"%{busca}%",))
 
-    for funcionario in funcionarios:
-        if busca.lower() in funcionario["nome"].lower():
+    funcionario = cursor.fetchone()
 
-            novo_nome = input("Digite o novo nome: ")
-            funcionario["nome"] = novo_nome
+    print(funcionario)
 
-            novo_cargo = input("Digite o novo cargo: ")
-            funcionario["cargo"] = novo_cargo
-
-            novo_salario = float(input("Digite o novo salário: "))
-            funcionario["salario"] = novo_salario
-
-            encontrado = True
-
-            print("Funcionário editado com sucesso!")
-            break
-
-    if encontrado == False:
-        print("Funcionário não encontrado.")
 
 
 while True:
