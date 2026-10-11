@@ -144,7 +144,7 @@ def excluir_funcionario():
     cursor.execute("""
     SELECT *FROM funcionarios
     WHERE nome LIKE ?
-    """,(f"%busca%",))
+    """,(f"%{busca}%",))
 
     funcionario = cursor.fetchone()
 
