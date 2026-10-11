@@ -20,9 +20,6 @@ CREATE TABLE IF NOT EXISTS funcionarios (
 
 conexao.commit() #"Salve definitivamente essa alteração no banco."
 
-funcionarios = []
-
-
 def cadastrar_funcionario():
     print("\nCADASTRAR FUNCIONÁRIO")
 
