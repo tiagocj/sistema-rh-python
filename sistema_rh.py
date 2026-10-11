@@ -119,6 +119,47 @@ def editar_funcionario():
 
     print(funcionario)
 
+    if funcionario:
+        novo_nome = input("Corrija o nome.")
+        novo_cargo = input("Corrija o cargo.")
+        novo_salario = float(input("Digite o novo salário"))
+
+        cursor.execute("""
+        UPDATE funcionarios SET nome = ?, cargo = ?, salario = ?
+        WHERE id =?
+        """, (novo_nome, novo_cargo, novo_salario, funcionario[0]))
+
+        conexao.commit()
+
+        print("Funcionário editado comsucesso!")
+
+    else:
+        print("Funcionário nãoe encontrado.")
+
+def excluir_funcionario():
+    print("\nEXCLUIR FUNCIONÁRIO")
+
+    busca = input("Digite o nomedofuncionário.")
+
+    cursor.execute("""
+    SELECT *FROM funcionarios
+    WHERE nome LIKE ?
+    """,(f"%busca%",))
+
+    funcionario = cursor.fetchone()
+
+    if funcionario:
+        cursor.execute("""
+        DELETE FROM funcionarios
+        WHERE id = ?
+        """, (funcionario[0],))
+
+        conexao.commit()
+
+        print("Funcionário excluído comsucesso!")
+
+    else:
+        print("Funcionário não encontrado.")
 
 
 while True:
