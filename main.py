@@ -33,4 +33,13 @@ def listar_funcionarios():
 
 @app.get("/funcionarios/{id}")
 def buscar_funcionario(id: int):
-    return {"id_recebido": id}
+    conexao = sqlite3.connect("rh.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("SELECT * FROM funcionarios WHERE id = ?", (id))
+
+    funcionario = cursor.fetchone()
+
+    conexao.close()
+
+    return funcionario
