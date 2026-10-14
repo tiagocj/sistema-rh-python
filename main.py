@@ -36,7 +36,7 @@ def buscar_funcionario(id: int):
     conexao = sqlite3.connect("rh.db")
     cursor = conexao.cursor()
 
-    cursor.execute("SELECT * FROM funcionarios WHERE id = ?", (id))
+    cursor.execute("SELECT * FROM funcionarios WHERE id = ?", (id,))
 
     funcionario = cursor.fetchone()
 
