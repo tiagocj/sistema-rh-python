@@ -1,5 +1,11 @@
 from fastapi import FastAPI #fastAPI:biblioteca de criação de APIs e backends web
+from pydantic import BaseModel #confere os dados que entram na API
 import sqlite3
+
+class Funcionario(BaseModel):
+    nome: str
+    cargo: str
+    salario: float
 
 app = FastAPI() # cria um objeto FastAPI e app aponta para esse objeto
 
@@ -42,4 +48,27 @@ def buscar_funcionario(id: int):
 
     conexao.close()
 
-    return funcionario
+    if funcionario is None:
+        return{"menssagem": "Funcionário não encontrado."}
+    
+    return {
+        "id": funcionario[0],
+        "Nome": funcionario[1],
+        "Cargo": funcionario[2],
+        "Salário": funcionario[3]
+    }
+
+@app.post("/funcionarios")
+def cadastrar_funcionario(funcionario: Funcionario):
+    conexao = sqlite3.connect("rh.db")
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        "INSERT INTO funcionarios (nome, cargo, salario) VALUES (?,?,?)",
+        (funcionario.nome, funcionario.cargo, funcionario.salario)
+    )
+
+    conexao.commit()
+    conexao.close()
+
+    return {"mensagem": "Funcionário cadastrado com sucesso."}
