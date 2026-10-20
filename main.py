@@ -13,7 +13,7 @@ app = FastAPI() # cria um objeto FastAPI e app aponta para esse objeto
 @app.get("/") # "/" é a raiz do sistema (@decorator)
 #@app.get("/") → "FastAPI, registre a função abaixo para atender requisições GET no endereço /."
 def inicio(): #É o q o python executará quando alguém fizer um get
-    return {"mensagem": "Sistema de RH funcionando"}
+    return {"Mensagem": "Sistema de RH Tiago"}
 
 @app.get("/funcionarios")
 def listar_funcionarios():
@@ -49,7 +49,7 @@ def buscar_funcionario(id: int):
     conexao.close()
 
     if funcionario is None:
-        return{"menssagem": "Funcionário não encontrado."}
+        return{"mensagem": "Funcionário não encontrado."}
     
     return {
         "id": funcionario[0],
@@ -72,3 +72,8 @@ def cadastrar_funcionario(funcionario: Funcionario):
     conexao.close()
 
     return {"mensagem": "Funcionário cadastrado com sucesso."}
+
+@app.put("/funcionarios/{id}")
+def editar_funcionario(id: int, funcionario: Funcionarios):
+    conexao = sqlite3.connect("rh.db")
+    cursor = conexao.cursor()
